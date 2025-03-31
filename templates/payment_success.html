@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Success</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <section class="block">
+        <h1>Payment Successful!</h1>
+        <p>Thank you for your payment, <span>{{ username }}</span>!</p>
+        {% if error_message %}
+            <p style="color: red;">{{ error_message }}</p>
+        {% endif %}
+        <p>Your current rank is: {{ rank }}</p>
+        <p>Amount: {{ amount }} SEK</p>
+        <p>City: {{ city }}</p>
+    </section>
+
+    <footer>
+        <a href="{{ url_for('index') }}">Back to Leaderboard</a> | 
+        <a href="{{ url_for('faq') }}">FAQ</a> | 
+        <a href="{{ url_for('privacy_policy') }}">Privacy Policy</a> | 
+        <a href="{{ url_for('disclaimer') }}">Disclaimer</a>
+    </footer>
+</body>
+</html>

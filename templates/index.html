@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pay2Win App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Block 1: Info -->
+    <section class="block">
+        <h1>Welcome to Pay2Win!</h1>
+        <p text-align="justify">Pay to climb the leaderboard. Your wallet determines your rank—no skills, just cash!</p>
+    </section>
+
+    <!-- Block 2: Form -->
+    <section class="block">
+        <h2>Enter Your Details</h2>
+        <form method="POST" action="{{ url_for('pay') }}" id="payment-form">
+            <label for="username">Username (min 3 chars):</label><br>
+            <input type="text" name="username" id="username" placeholder="Enter your username" required><br>
+
+            <label>Amount:</label><br>
+            <input type="number" step="1" name="amount" id="amount" required placeholder="Minimum 10 SEK"><br>
+
+            <label for="city">City/Team (optional):</label><br>
+            <select name="city" id="city">
+                <option value="">None</option>
+                {% for city in cities %}
+                    <option value="{{ city }}">{{ city }}</option>
+                {% endfor %}
+            </select><br>
+
+            <button type="submit" id="pay-button">Pay and Climb Leaderboard</button>
+        </form>
+
+        <div id="warning-message" style="color: red; display: none; position: absolute; background-color: #ffdddd; border: 1px solid #ff0000; padding: 10px; border-radius: 5px; font-size: 14px; z-index: 10; white-space: nowrap; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+            The amount must be at least 10 SEK
+        </div>
+    </section>
+
+    <script>
+        document.getElementById('payment-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const amount = parseFloat(document.getElementById('amount').value);
+            const warningMessage = document.getElementById('warning-message');
+            const submitButton = document.getElementById('pay-button');
+
+            if (amount < 1) {
+                warningMessage.style.display = "block";
+                const rect = submitButton.getBoundingClientRect();
+                warningMessage.style.left = `${rect.left + rect.width + 10}px`;
+                warningMessage.style.top = `${rect.top + window.scrollY}px`;
+            } else {
+                this.submit();
+            }
+        });
+    </script>
+
+    <!-- Block 3: Leaderboard -->
+    <section class="block">
+        <h2>Leaderboard</h2>
+
+        <!-- Individual leaderboard -->
+        <h3>Top Players</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Username</th>
+                    <th>City</th>
+                    <th>Total Amount (SEK)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rank, username, city, amount in leaderboard %}
+                <tr>
+                    <!-- Apply rank class to the rank td -->
+                    <td class="rank-{{ rank }}">{{ rank }}</td>
+                    <td>{{ username }}</td>
+                    <td>{{ city }}</td>
+                    <td>{{ amount }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+
+        <!-- Player Pagination -->
+        <div class="pagination">
+            {% if total_player_pages > 1 %}
+                {% for page in range(1, total_player_pages + 1) %}
+                    <a href="{{ url_for('index', player_page=page, city_page=city_page) }}" class="page-btn {% if page == player_page %}active{% endif %}">{{ page }}</a>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <!-- City leaderboard -->
+        <h3>City Leaderboard</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>City</th>
+                    <th>Number of Donations</th>
+                    <th>Total Amount (SEK)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rank, city, donation_count, amount in city_leaderboard %}
+                <tr>
+                    <!-- Apply rank class to the rank td -->
+                    <td class="rank-{{ rank }}">{{ rank }}</td>
+                    <td>{{ city }}</td>
+                    <td>{{ donation_count }}</td>
+                    <td>{{ amount|round(2) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+
+        <!-- City Pagination -->
+        <div class="pagination">
+            {% if total_city_pages > 1 %}
+                {% for page in range(1, total_city_pages + 1) %}
+                    <a href="{{ url_for('index', player_page=player_page, city_page=page) }}" class="page-btn {% if page == city_page %}active{% endif %}">{{ page }}</a>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </section>
+</body>
+
+<footer>
+    <p>&copy; 2025 Pay2Win App | <a href="{{ url_for('disclaimer') }}">Disclaimer</a> | <a href="{{ url_for('privacy_policy') }}">Privacy Policy</a></p>
+</footer>
+
+</html>

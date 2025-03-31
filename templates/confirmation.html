@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Confirmation</title>
+</head>
+<body>
+    <h1>Payment Summary</h1>
+    <p>Username: {{ username }}</p>
+    <p>Amount: {{ amount }} {{ currency }}</p>
+    <p>Team: {{ team or 'Not selected' }}</p>
+    <p>Choose payment method:</p>
+    <button>Pay with PayPal</button>
+    <button>Pay with Bank Card</button>
+    <a href="{{ url_for('index') }}">Back to Home</a>
+</body>
+</html>

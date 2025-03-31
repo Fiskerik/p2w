@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment - Pay2Win</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .payment-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap; /* Allows wrapping on smaller screens */
+        }
+        .left-pane, .right-pane {
+            width: 48%; /* Slightly less than half to account for padding */
+            box-sizing: border-box;
+        }
+        .payment-form {
+            display: none;
+        }
+        .payment-form.active {
+            display: block;
+        }
+        @media (max-width: 600px) { /* Responsive adjustment */
+            .left-pane, .right-pane {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+        }
+
+        /* Align radio buttons and text */
+        .payment-methods label {
+            display: flex;
+            align-items: center;  /* Aligns the radio button and text horizontally */
+            margin-bottom: 10px;
+        }
+
+        .payment-methods input[type="radio"] {
+            margin-right: 10px; /* Space between radio button and label text */
+        }
+
+        /* Styling for the payment method icons */
+        .payment-methods img {
+            width: 30px; /* Adjust the icon size */
+            margin-right: 10px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <section class="block">
+        <div class="payment-container">
+            <!-- Left Pane: Payment Summary -->
+            <div class="left-pane">
+                <h2>Your Payment Details</h2>
+                <p><strong>Username:</strong> {{ username }}</p>
+                <p><strong>Amount:</strong> {{ amount }} SEK</p>
+                <p><strong>City/Team:</strong> {{ city or 'N/A' }}</p>
+            </div>
+
+            <!-- Right Pane: Payment Methods -->
+            <div class="right-pane">
+                <h2>Select Payment Method</h2>
+                <form action="/process-payment" method="POST" id="payment-form">
+                    <div class="payment-methods">
+                        <!-- Radio Buttons with Icons -->
+                        <label>
+                            <input type="radio" name="payment_method" value="Paypal" checked onchange="showForm('paypal')">
+                            <span>
+                                <img src="{{ url_for('static', filename='images/PayPal.png') }}" alt="Paypal Icon">
+                                Paypal
+                            </span>
+                        </label>
+                        
+                        <label>
+                            <input type="radio" name="payment_method" value="Swish" onchange="showForm('swish')">
+                            <span>
+                                <img src="{{ url_for('static', filename='images/Swish_Logo_Primary_Light-BG_P3.png') }}" alt="Swish Icon"> 
+                                Swish
+                            </span>
+                        </label>
+                        
+                        <label>
+                            <input type="radio" name="payment_method" value="Credit Card" onchange="showForm('credit-card')">
+                            <span>
+                                <img src="{{ url_for('static', filename='images/creditcard.png') }}" alt="Credit Card Icon"> 
+                                Credit Card
+                            </span>
+                        </label>
+                    </div>
+
+                    <!-- Hidden inputs for payment data -->
+                    <input type="hidden" name="username" value="{{ username }}">
+                    <input type="hidden" name="amount" value="{{ amount }}">
+                    <input type="hidden" name="city" value="{{ city }}">
+
+                    <!-- Payment Method Forms -->
+                    <div id="paypal-form" class="payment-form active">
+                        <h3>Paypal Payment</h3>
+                        <p>Click "Proceed" to redirect to Paypal.</p>
+                        <button type="submit">Proceed to Paypal</button>
+                    </div>
+
+                    <div id="swish-form" class="payment-form">
+                        <h3>Swish Payment</h3>
+                        <label for="phone">Phone Number:</label><br>
+                        <input type="text" name="phone" id="phone" placeholder="Enter your phone number"><br><br>
+                        <button type="submit">Proceed with Swish</button>
+                    </div>
+
+                    <div id="credit-card-form" class="payment-form">
+                        <h3>Credit Card Payment</h3>
+                        <label for="card-number">Card Number:</label><br>
+                        <input type="text" name="card-number" id="card-number" placeholder="1234 5678 9012 3456"><br>
+                        <label for="expiry">Expiry Date:</label><br>
+                        <input type="text" name="expiry" id="expiry" placeholder="MM/YY"><br>
+                        <label for="cvc">CVC:</label><br>
+                        <input type="text" name="cvc" id="cvc" placeholder="123"><br><br>
+                        <button type="submit">Proceed with Credit Card</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <a href="/">Home</a>
+        <a href="/faq">FAQ</a>
+        <a href="/privacy-policy">Privacy Policy</a>
+        <a href="/disclaimer">Disclaimer</a>
+    </footer>
+
+    <script>
+        function showForm(method) {
+            // Hide all forms
+            document.querySelectorAll('.payment-form').forEach(form => {
+                form.classList.remove('active');
+            });
+            // Show the selected form
+            document.getElementById(`${method}-form`).classList.add('active');
+        }
+
+        // Show Paypal form by default on page load
+        window.onload = function() {
+            showForm('paypal');
+        };
+    </script>
+</body>
+</html>
