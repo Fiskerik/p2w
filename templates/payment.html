@@ -8,10 +8,10 @@
         .payment-container {
             display: flex;
             justify-content: space-between;
-            flex-wrap: wrap; /* Allows wrapping on smaller screens */
+            flex-wrap: wrap;
         }
         .left-pane, .right-pane {
-            width: 48%; /* Slightly less than half to account for padding */
+            width: 48%;
             box-sizing: border-box;
         }
         .payment-form {
@@ -20,34 +20,27 @@
         .payment-form.active {
             display: block;
         }
-        @media (max-width: 600px) { /* Responsive adjustment */
+        @media (max-width: 600px) {
             .left-pane, .right-pane {
                 width: 100%;
                 margin-bottom: 20px;
             }
         }
-
-        /* Align radio buttons and text */
         .payment-methods label {
             display: flex;
-            align-items: center;  /* Aligns the radio button and text horizontally */
+            align-items: center;
             margin-bottom: 10px;
         }
-
         .payment-methods input[type="radio"] {
-            margin-right: 10px; /* Space between radio button and label text */
-        }
-
-        /* Styling for the payment method icons */
-        .payment-methods img {
-            width: 30px; /* Adjust the icon size */
             margin-right: 10px;
         }
-
+        .payment-methods img {
+            width: 30px;
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body>
-
     <section class="block">
         <div class="payment-container">
             <!-- Left Pane: Payment Summary -->
@@ -61,9 +54,8 @@
             <!-- Right Pane: Payment Methods -->
             <div class="right-pane">
                 <h2>Select Payment Method</h2>
-                <form action="/process-payment" method="POST" id="payment-form">
+                <form id="payment-form" method="POST" action="/process-payment">
                     <div class="payment-methods">
-                        <!-- Radio Buttons with Icons -->
                         <label>
                             <input type="radio" name="payment_method" value="Paypal" checked onchange="showForm('paypal')">
                             <span>
@@ -71,7 +63,6 @@
                                 Paypal
                             </span>
                         </label>
-                        
                         <label>
                             <input type="radio" name="payment_method" value="Swish" onchange="showForm('swish')">
                             <span>
@@ -79,7 +70,6 @@
                                 Swish
                             </span>
                         </label>
-                        
                         <label>
                             <input type="radio" name="payment_method" value="Credit Card" onchange="showForm('credit-card')">
                             <span>
@@ -98,7 +88,7 @@
                     <div id="paypal-form" class="payment-form active">
                         <h3>Paypal Payment</h3>
                         <p>Click "Proceed" to redirect to Paypal.</p>
-                        <button type="submit">Proceed to Paypal</button>
+                        <button type="submit" id="paypal-submit">Proceed to Paypal</button>
                     </div>
 
                     <div id="swish-form" class="payment-form">
@@ -123,22 +113,40 @@
         </div>
     </section>
 
-    <footer>
+    <footer class="block">
         <a href="/">Home</a>
         <a href="/faq">FAQ</a>
-        <a href="/privacy-policy">Privacy Policy</a>
         <a href="/disclaimer">Disclaimer</a>
     </footer>
 
     <script>
         function showForm(method) {
-            // Hide all forms
             document.querySelectorAll('.payment-form').forEach(form => {
                 form.classList.remove('active');
             });
-            // Show the selected form
             document.getElementById(`${method}-form`).classList.add('active');
         }
+
+        // Handle form submission
+        document.getElementById('payment-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+            const selectedMethod = document.querySelector('input[name="payment_method"]:checked').value;
+
+            if (selectedMethod === 'Paypal') {
+                if (selectedMethod === 'Paypal') {
+                    const username = "{{ username }}";
+                    const amount = "{{ amount }}";
+                    const city = "{{ city }}";
+
+                    const custom_id = encodeURIComponent(`${username}|${city}`);
+                    window.location.href = `https://www.paypal.com/ncp/payment/9KVT952VLYBDE?custom_id=${custom_id}`;
+                    }
+
+            } else {
+                // For other methods, submit the form to the server (e.g., /process-payment)
+                this.submit();
+            }
+        });
 
         // Show Paypal form by default on page load
         window.onload = function() {

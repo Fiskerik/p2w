@@ -2,30 +2,50 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Disclaimer - Pay2Win</title>
+    <title>How It Works - Pay2Win App</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <header>
-        <h1>Disclaimer</h1>
-        <nav>
-            <a href="/">Home</a>
-            <a href="/faq">FAQ</a>
-            <a href="/privacy-policy">Privacy Policy</a>
-        </nav>
-    </header>
-
-    <section>
-        <h2>Important Information</h2>
-        <p>Pay2Win is a fun platform. Please be aware that it is a game and should not be considered as an investment. Your payment is not refundable under most circumstances.</p>
-
-        <!-- Add more disclaimers as necessary -->
+    <!-- Block 1: Header -->
+    <section class="block">
+        <h1>How It Works</h1>
+        <p>Learn how to dominate the Pay2Win leaderboards with just your wallet!</p>
     </section>
 
-    <footer>
+    <!-- Block 2: Steps -->
+    <section class="block">
+        <h2>The Process</h2>
+        <div class="steps-container">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Choose Your Amount</h3>
+                <p>Select how much you want to contribute. The more you pay, the higher your rank will be.</p>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Pick a City (Optional)</h3>
+                <p>Join one of the cities to contribute to their collective score and compete in team rankings - or go completely solo.</p>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Pay & Get Ranked</h3>
+                <p>Your payment is processed securely and your score is immediately updated on the leaderboard.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Block 3: Call to Action -->
+    <section class="block">
+        <h2>Ready to Win?</h2>
+        <p><a href="{{ url_for('index') }}" class="cta-button">Start Paying Now</a></p>
+    </section>
+
+    <footer class="block">
         <a href="/">Home</a>
         <a href="/faq">FAQ</a>
-        <a href="/privacy-policy">Privacy Policy</a>
+        <a href="/disclaimer">Disclaimer</a>
     </footer>
 </body>
 </html>

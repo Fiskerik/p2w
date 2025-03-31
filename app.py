@@ -191,6 +191,41 @@ def process_payment():
 
     return redirect(url_for('payment_success', username=username, amount=amount, city=city))
 
+@app.route('/paypal/webhook', methods=['POST'])
+def paypal_webhook():
+    data = request.get_json()
+
+    # Debug log
+    print("PayPal webhook received:", json.dumps(data, indent=2))
+
+    # Kontrollera att det är en godkänd betalning
+    event_type = data.get('event_type')
+    if event_type != 'PAYMENT.CAPTURE.COMPLETED':
+        return jsonify({'status': 'ignored'}), 200
+
+    # Hämta användardata
+    resource = data.get('resource', {})
+    custom_id = resource.get('custom_id')  # Här skickar vi t.ex. "username|amount|city"
+    amount = float(resource.get('amount', {}).get('value', 0))
+
+    if not custom_id or amount < 1:
+        return jsonify({'error': 'Missing or invalid data'}), 400
+
+    # Parsar custom_id
+    try:
+        username, city = custom_id.split('|', 1)
+    except ValueError:
+        return jsonify({'error': 'Invalid custom_id format'}), 400
+
+    # Spara i databasen
+    conn = sqlite3.connect(DATABASE_PATH)
+    c = conn.cursor()
+    c.execute("INSERT INTO payments (username, amount, city, timestamp) VALUES (?, ?, ?, ?)",
+              (username, amount, city if city != 'None' else None, datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
+    conn.commit()
+    conn.close()
+
+    return jsonify({'status': 'success'}), 200
 
 if __name__ == '__main__':
     init_db()

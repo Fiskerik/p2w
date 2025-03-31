@@ -5,12 +5,13 @@
     <title>Pay2Win App</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
+<body class="content">
     <!-- Block 1: Info -->
     <section class="block">
         <h1>Welcome to Pay2Win!</h1>
-        <p text-align="justify">Pay to climb the leaderboard. Your wallet determines your rank—no skills, just cash!</p>
+        <p class="centered-text">Pay to climb the leaderboard. Your wallet determines your rank—no skills, just cash!</p>
     </section>
+    
 
     <!-- Block 2: Form -->
     <section class="block">
@@ -130,7 +131,7 @@
     </section>
 </body>
 
-<footer>
+<footer class="block">
     <p>&copy; 2025 Pay2Win App | <a href="{{ url_for('disclaimer') }}">Disclaimer</a> | <a href="{{ url_for('privacy_policy') }}">Privacy Policy</a></p>
 </footer>
 
