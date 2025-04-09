@@ -40,7 +40,7 @@
         {% if error_message %}
             <p style="color: red;">{{ error_message }}</p>
         {% endif %}
-        <p>Din nuvarande placering i topplistan: Uppdateras (Kan ta någon minut)</p>
+        <p>Din nuvarande placering i topplistan: {{ rank }}</p>
         <p>Belopp: {{ amount }} SEK</p>
         <p>Stad: {{ city }}</p>
     </section>

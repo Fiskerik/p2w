@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script type="text/javascript" data-cmp-ab="1" src="https://cdn.consentmanager.net/delivery/autoblocking/71957044c2fb4.js" data-cmp-host="a.delivery.consentmanager.net" data-cmp-cdn="cdn.consentmanager.net" data-cmp-codesrc="16"></script>
     <meta charset="UTF-8">
     <title>Payment - Pay2Win</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/png">
+    <meta name="google-adsense-account" content="ca-pub-8854735603167656">
     <style>
         .payment-container {
             display: flex;
@@ -40,7 +44,31 @@
         }
     </style>
 </head>
-<body>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZR00EZEYCL"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-ZR00EZEYCL');
+</script>
+<body class="content">
+    <header class="main-header">
+        <div class="header-container">
+            <a href="/" class="logo-link">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Stadskampen Logo" class="logo">
+            </a>
+            <nav class="main-nav">
+                <ul class="nav-list">
+                    <li><a href="/">Startsida</a></li>
+                    <li><a href="/faq">FAQ</a></li>
+                    <li><a href="/disclaimer">Hur funkar det?</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
     <section class="block">
         <div class="payment-container">
             <!-- Left Pane: Payment Summary -->
@@ -53,105 +81,105 @@
 
             <!-- Right Pane: Payment Methods -->
             <div class="right-pane">
-                <h2>Select Payment Method</h2>
-                <form id="payment-form" method="POST" action="/process-payment">
+                <h2>Välj betalmetod</h2>
+                <form id="payment-form" method="POST">
                     <div class="payment-methods">
-                        <label>
-                            <input type="radio" name="payment_method" value="Paypal" checked onchange="showForm('paypal')">
-                            <span>
-                                <img src="{{ url_for('static', filename='images/PayPal.png') }}" alt="Paypal Icon">
-                                Paypal
-                            </span>
-                        </label>
-                        <label>
-                            <input type="radio" name="payment_method" value="Swish" onchange="showForm('swish')">
-                            <span>
-                                <img src="{{ url_for('static', filename='images/Swish_Logo_Primary_Light-BG_P3.png') }}" alt="Swish Icon"> 
-                                Swish
-                            </span>
-                        </label>
-                        <label>
-                            <input type="radio" name="payment_method" value="Credit Card" onchange="showForm('credit-card')">
-                            <span>
-                                <img src="{{ url_for('static', filename='images/creditcard.png') }}" alt="Credit Card Icon"> 
-                                Credit Card
-                            </span>
-                        </label>
+                      <label>
+                        <input type="radio" name="payment_method" value="Paypal" checked onchange="showForm('paypal')">
+                        <img src="{{ url_for('static', filename='images/PayPal.png') }}" alt="Paypal"> Paypal
+                      </label>
+                      <label>
+                        <input type="radio" name="payment_method" value="Stripe" onchange="showForm('stripe')">
+                        <img src="{{ url_for('static', filename='images/stripe.jpg') }}" alt="Stripe"> Kort (Stripe)
+                      </label>
                     </div>
+                  
+                    <!-- Dold data -->
+                    <input type="hidden" name="username" id="hidden-username" value="{{ username }}">
+                    <input type="hidden" name="amount" id="hidden-amount" value="{{ amount }}">
+                    <input type="hidden" name="city" id="hidden-city" value="{{ city }}">
+                    <input type="hidden" name="message" id="hidden-message" value="{{ message or '' }}">
 
-                    <!-- Hidden inputs for payment data -->
-                    <input type="hidden" name="username" value="{{ username }}">
-                    <input type="hidden" name="amount" value="{{ amount }}">
-                    <input type="hidden" name="city" value="{{ city }}">
-
-                    <!-- Payment Method Forms -->
+                  
+                    <!-- Paypal-form -->
                     <div id="paypal-form" class="payment-form active">
-                        <h3>Paypal Payment</h3>
-                        <p>Click "Proceed" to redirect to Paypal.</p>
-                        <button type="submit" id="paypal-submit">Proceed to Paypal</button>
+                      <button type="button" onclick="submitPaypal()">Fortsätt med Paypal</button>
                     </div>
-
-                    <div id="swish-form" class="payment-form">
-                        <h3>Swish Payment</h3>
-                        <label for="phone">Phone Number:</label><br>
-                        <input type="text" name="phone" id="phone" placeholder="Enter your phone number"><br><br>
-                        <button type="submit">Proceed with Swish</button>
+                  
+                    <!-- Stripe-form -->
+                    <div id="stripe-form" class="payment-form">
+                      <button type="submit" formaction="/create-checkout-session">Fortsätt med Stripe</button>
                     </div>
-
-                    <div id="credit-card-form" class="payment-form">
-                        <h3>Credit Card Payment</h3>
-                        <label for="card-number">Card Number:</label><br>
-                        <input type="text" name="card-number" id="card-number" placeholder="1234 5678 9012 3456"><br>
-                        <label for="expiry">Expiry Date:</label><br>
-                        <input type="text" name="expiry" id="expiry" placeholder="MM/YY"><br>
-                        <label for="cvc">CVC:</label><br>
-                        <input type="text" name="cvc" id="cvc" placeholder="123"><br><br>
-                        <button type="submit">Proceed with Credit Card</button>
-                    </div>
-                </form>
+                  </form>
             </div>
         </div>
     </section>
-
-    <footer class="block">
-        <a href="/">Home</a>
-        <a href="/faq">FAQ</a>
-        <a href="/disclaimer">Disclaimer</a>
-    </footer>
-
     <script>
-        function showForm(method) {
-            document.querySelectorAll('.payment-form').forEach(form => {
-                form.classList.remove('active');
-            });
-            document.getElementById(`${method}-form`).classList.add('active');
-        }
-
-        // Handle form submission
-        document.getElementById('payment-form').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent default form submission
-            const selectedMethod = document.querySelector('input[name="payment_method"]:checked').value;
-
-            if (selectedMethod === 'Paypal') {
-                if (selectedMethod === 'Paypal') {
-                    const username = "{{ username }}";
-                    const amount = "{{ amount }}";
-                    const city = "{{ city }}";
-
-                    const custom_id = encodeURIComponent(`${username}|${city}`);
-                    window.location.href = `https://www.paypal.com/ncp/payment/9KVT952VLYBDE?custom_id=${custom_id}`;
-                    }
-
+        // Visa "annan stad"-input om det valts
+        document.querySelector('select[name="city"]').addEventListener('change', function () {
+            const input = document.getElementById('customCityInput');
+            if (this.value === 'custom') {
+                input.style.display = 'block';
+                input.required = true;
             } else {
-                // For other methods, submit the form to the server (e.g., /process-payment)
-                this.submit();
+                input.style.display = 'none';
+                input.required = false;
             }
         });
-
-        // Show Paypal form by default on page load
-        window.onload = function() {
-            showForm('paypal');
-        };
     </script>
+<script>
+    function showForm(method) {
+      document.querySelectorAll('.payment-form').forEach(form => {
+        form.classList.remove('active');
+      });
+      document.getElementById(`${method}-form`).classList.add('active');
+    }
+  
+    function submitPaypal() {
+        const username = document.getElementById('hidden-username').value;
+        const amount = document.getElementById('hidden-amount').value;
+        let city = document.getElementById('hidden-city').value;
+        const customCity = document.getElementById('customCityInput')?.value || '';
+
+        if (city === 'Övrig' && customCity.trim()) {
+            city = customCity.trim(); // Ersätt med manuell stad
+        }
+
+        fetch('/create-paypal-order', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+            username: username,
+            amount: amount,
+            city: city,
+            message: document.getElementById('hidden-message').value
+            })
+
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.approval_url) {
+            window.location.href = data.approval_url;
+            } else {
+            alert("Kunde inte skapa Paypal-order.");
+            }
+        });
+        }
+
+  
+    // Visa rätt formulär vid laddning
+    window.onload = function () {
+      showForm('paypal');
+    };
+  </script>
 </body>
+<footer class="block" style="text-align: center;">
+    <p style="font-size: 12px; color: #888;"><i>Observera! – du köper endast poäng till topplistan. Inget mer, inget mindre. Inga återbetalningar, bara ära!</i></p>
+    <br>
+    <a href="/">Startsida</a>
+    <a href="/faq">FAQ</a>
+    <a href="/privacy_policy">Integritetspolicy</a>
+</footer>
 </html>

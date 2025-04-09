@@ -1,27 +1,122 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sv">
 <head>
+    <script type="text/javascript" data-cmp-ab="1" src="https://cdn.consentmanager.net/delivery/autoblocking/71957044c2fb4.js" data-cmp-host="a.delivery.consentmanager.net" data-cmp-cdn="cdn.consentmanager.net" data-cmp-codesrc="16"></script>
     <meta charset="UTF-8">
-    <title>Privacy Policy - Pay2Win</title>
+    <title>Integritetspolicy - Stadskampen</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/png">
+    <meta name="google-adsense-account" content="ca-pub-8854735603167656">
 </head>
-<body>
-    <div class="content">
-        <section class="block">
-            <h2>Your Privacy</h2>
-            <p>
-                We value your privacy. All personal information collected is used exclusively for managing your account and payments.
-                We do not share your data with third parties.
-            </p>
-            <!-- Lägg till mer text om du vill -->
-        </section>
-    </div>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZR00EZEYCL"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-    <footer class="block">
-        <a href="/">Home</a>
+  gtag('config', 'G-ZR00EZEYCL');
+</script>
+<body class="content">
+    <header class="main-header">
+        <div class="header-container">
+            <a href="/" class="logo-link">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Stadskampen Logo" class="logo">
+            </a>
+            <nav class="main-nav">
+                <ul class="nav-list">
+                    <li><a href="/">Startsida</a></li>
+                    <li><a href="/faq">FAQ</a></li>
+                    <li><a href="/disclaimer">Hur funkar det?</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="block left-aligned">
+        <h1>Integritetspolicy</h1>
+        <p><em>Senast uppdaterad: 2 April 2025</em></p>
+
+        <h2>1. Introduktion</h2>
+        <p>Välkommen till Stadskampen. Denna integritetspolicy förklarar hur vi hanterar information när du använder vår webbplats.</p>
+        <p>Vi prioriterar minimering av datauppsamling och samlar endast in information som är nödvändig för att tjänsten ska fungera.</p>
+
+        <h2>2. Vilken information vi samlar in</h2>
+
+        <h3>2.1 Betalningshantering</h3>
+        <p>Vi använder PayPal och Swish för att hantera betalningar. Under betalningsprocessen samlas denna data in:</p>
+        <b><p>Paypal:</p></b>
+        <ul>
+            <li>Din e-postadress</li>
+            <li>Betalningsinformation</li>
+        </ul>
+        <p>Denna information hanteras enligt PayPals egna integritetspolicy. Vi lagrar varken din e-post eller dina betalningsuppgifter på våra servrar.</p>
+        
+        <b><p>Swish:</p></b>
+        <ul>
+            <li>Ditt telefonnummer</li>
+        </ul>
+        <p>Denna information hanteras enligt Swish egna integritetspolicy. Vi lagrar inte ditt telefonnummer.</p>
+
+        <h3>2.2 Information för topplistan</h3>
+        <p>För att kunna visa topplistor sparar vi:</p>
+        <ul>
+            <li>Ditt valda användarnamn (ett valfritt alias du själv väljer)</li>
+            <li>Betalningsbelopp (för att räkna ut placering)</li>
+            <li>Vald stad (om du har valt en stad att representera)</li>
+            <li>Tidsstämpel för transaktionen (för att räkna bidragstrender)</li>
+        </ul>
+        <p>Denna information visas offentligt i våra topplistor, men är inte personligt identifierande på något sätt.</p>
+
+        <h3>2.3 Teknisk information</h3>
+        <p>Vår server loggar automatiskt grundläggande teknisk information såsom IP-adresser och webbläsartyp för säkerhet och felsökning. Dessa loggar roteras automatiskt och lagras inte permanent.</p>
+
+        <h2>3. Hur vi använder informationen</h2>
+        <p>Den insamlade informationen används endast till att:</p>
+        <ul>
+            <li>Hantera betalningar via PayPal eller Swish</li>
+            <li>Visa och uppdatera topplistor</li>
+            <li>Räkna statistik kopplad till städer och individuella bidrag</li>
+            <li>Säkerställa driftsäkerhet och förebygga bedrägerier</li>
+        </ul>
+        <p>Vi använder inte din information för marknadsföring och delar inte med oss av information till tredje part, utöver det som krävs för betalningshantering.</p>
+
+        <h2>4. Lagringstid</h2>
+        <p>Vi följer principen om dataminimering:</p>
+        <ul>
+            <li>Topplisteinformation (användarnamn, belopp, stad) sparas så länge det behövs för att driva tjänsten</li>
+            <li>Vi lagrar inte din e-post, telefonnummer eller betalningsinformation (detta hanteras av PayPal och Swish)</li>
+            <li>Serverloggar roteras och lagras inte permanent</li>
+        </ul>
+
+        <h2>5. Dina rättigheter</h2>
+        <p>Du har rätt att:</p>
+        <ul>
+            <li>Begära ut information som PayPal och Swish har om dina betalningar (kontakta PayPal eller Swish direkt)</li>
+        </ul>
+        <p>För andra frågor om integritet, kontakta oss på <a href="mailto:info@stadskampen.nu">info@stadskampen.nu</a>.</p>
+
+        <h2>6. Säkerhet</h2>
+        <p>Vi använder rimliga säkerhetsåtgärder för att skydda information:</p>
+        <ul>
+            <li>All webbtrafik är krypterad via HTTPS</li>
+            <li>Betalningar hanteras säkert via PayPal eller Swish</li>
+            <li>Serveråtkomst är begränsad och skyddad</li>
+        </ul>
+
+        <h2>7. Ändringar i denna policy</h2>
+        <p>Vi kan uppdatera denna policy vid behov. Den senaste versionen publiceras alltid här med uppdaterat datum.</p>
+
+        <h2>8. Kontakta oss</h2>
+        <p>Vid frågor om denna policy, kontakta oss på <a href="mailto:info@stadskampen.nu">info@stadskampen.nu</a>.</p>
+    </section>
+
+    <footer class="block" style="text-align: center;">
+        <p style="font-size: 12px; color: #888;"><i>Observera! – du köper endast poäng till topplistan. Inget mer, inget mindre. Inga återbetalningar, bara ära!</i></p>
+        <br>
+        <a href="/">Startsida</a>
         <a href="/faq">FAQ</a>
-        <a href="/disclaimer">Disclaimer</a>
+        <a href="/privacy_policy">Integritetspolicy</a>
     </footer>
 </body>
-
 </html>

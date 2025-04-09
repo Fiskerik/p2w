@@ -1,0 +1,55 @@
+<!-- templates/admin_edit.html -->
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <script type="text/javascript" data-cmp-ab="1" src="https://cdn.consentmanager.net/delivery/autoblocking/71957044c2fb4.js" data-cmp-host="a.delivery.consentmanager.net" data-cmp-cdn="cdn.consentmanager.net" data-cmp-codesrc="16"></script>
+  <meta charset="UTF-8">
+  <title>Redigera Donationer</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta name="google-adsense-account" content="ca-pub-8854735603167656">
+</head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZR00EZEYCL"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-ZR00EZEYCL');
+</script>
+<body>
+  <section class="block">
+    <h2>Ändra poster</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Användare</th><th>Belopp</th><th>Stad</th><th>Hälsning</th><th>Timestamp</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in payments %}
+        <tr>
+          <form method="POST" action="{{ url_for('update_payment') }}">
+            <td><input type="text" name="username" value="{{ row.username }}"></td>
+            <td><input type="number" name="amount" step="0.01" value="{{ row.amount }}"></td>
+            <td><input type="text" name="city" value="{{ row.city }}"></td>
+            <td><input type="text" name="message" value="{{ row.message }}"></td>
+            <td>{{ row.timestamp }}</td>
+            <td>
+              <input type="hidden" name="id" value="{{ row.id }}">
+              <button type="submit">Spara</button>
+            </td>
+          </form>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="pagination">
+      {% for p in range(1, total_pages + 1) %}
+        <a href="{{ url_for('admin_edit_payments', page=p) }}" class="{% if page == p %}active{% endif %}">{{ p }}</a>
+      {% endfor %}
+    </div>
+  </section>
+</body>
+</html>

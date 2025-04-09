@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript" data-cmp-ab="1" src="https://cdn.consentmanager.net/delivery/autoblocking/71957044c2fb4.js" data-cmp-host="a.delivery.consentmanager.net" data-cmp-cdn="cdn.consentmanager.net" data-cmp-codesrc="16"></script>
+    <meta charset="UTF-8">
+    <title>Admin - Pending Cities</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/png">
+    <meta name="google-adsense-account" content="ca-pub-8854735603167656">
+</head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZR00EZEYCL"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-ZR00EZEYCL');
+</script>
+<body>
+    <div class="content">
+    <header class="main-header">
+        <div class="header-container">
+            <a href="/" class="logo-link">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Stadskampen Logo" class="logo">
+            </a>
+            <nav class="main-nav">
+                <ul class="nav-list">
+                    <li><a href="/">Startsida</a></li>
+                    <li><a href="/faq">FAQ</a></li>
+                    <li><a href="/disclaimer">Hur funkar det?</a></li>
+                </ul>
+            </nav>
+            <nav class="secondary-nav">
+                <ul class="nav-list">    
+                    {% if session.get('admin') %}
+                    <li><a href="{{ url_for('logout') }}">Logga ut</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="block">
+        <h1>Godkänn nya städer</h1>
+        <form method="POST">
+            <table>
+                <thead>
+                    <tr>
+                        <th>✔</th>
+                        <th>Stad</th>
+                        <th>Inskickad av</th>
+                        <th>Datum</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in pending %}
+                    <tr>
+                        <td><input type="checkbox" name="approve" value="{{ row.id }}"></td>
+                        <td>{{ row.name }}</td>
+                        <td>{{ row.submitted_by }}</td>
+                        <td>{{ row.timestamp }}</td>
+                    </tr>
+                    {% endfor %}
+                    
+                </tbody>
+            </table>
+            <br>
+            <button type="submit">Godkänn valda</button>
+        </form>
+    </section>
+
+    <section class="block">
+        <h1>Lägg till manuell donation</h1>
+        <form method="POST" action="/admin/manual-add">
+            <label for="username">Användarnamn:</label><br>
+            <input type="text" name="username" required><br><br>
+
+            <label for="amount">Belopp (SEK):</label><br>
+            <input type="number" name="amount" step="0.01" required><br><br>
+
+            <label for="city">Stad:</label><br>
+            <input type="text" name="city" required><br><br>
+
+            <button type="submit">Lägg till</button>
+        </form>
+    </section>
+    <section class="block">
+        <h2>Ändra poster</h2>
+        <table>
+          <thead>
+            <tr><th>Användare</th><th>Belopp</th><th>Stad</th><th>Hälsning</th><th>Timestamp</th><th></th></tr>
+          </thead>
+          <tbody>
+            {% for row in payments %}
+            <tr id="row-{{ row.id }}">
+                <form method="POST" action="{{ url_for('update_payment') }}" id="form-{{ row.id }}">
+                  <td><input type="text" name="username" value="{{ row.username }}" disabled></td>
+                  <td><input type="number" step="0.01" name="amount" value="{{ row.amount }}" disabled></td>
+                  <td><input type="text" name="city" value="{{ row.city }}" disabled></td>
+                  <td><input type="text" name="message" value="{{ row.message }}" disabled></td>
+                  <td>{{ row.timestamp }}</td>
+                  <td>
+                    <input type="hidden" name="id" value="{{ row.id }}">
+                    <button type="button" onclick="enableEdit('{{ row.id }}')" id="edit-btn-{{ row.id }}">Redigera</button>
+                    <button type="submit" style="display: none;" id="save-btn-{{ row.id }}">Spara</button>
+                    <button type="button" onclick="deleteRow('{{ row.id }}')" style="margin-left: 5px;">❌</button>
+                    
+                  </td>
+                </form>
+              </tr>              
+            {% endfor %}
+          </tbody>
+        </table>
+        
+        <div class="pagination">
+          {% for p in range(1, total_pages + 1) %}
+            <a href="{{ url_for('admin_edit_payments', page=p) }}">{{ p }}</a>
+          {% endfor %}
+        </div>
+
+    </section>
+</div>
+</body>
+<script>
+    function enableEdit(id) {
+        const row = document.getElementById(`row-${id}`);
+        const form = document.getElementById(`form-${id}`);
+        row.classList.add('edited');
+        [...form.elements].forEach(el => {
+            if (el.name !== "id") el.disabled = false;
+        });
+        document.getElementById(`edit-btn-${id}`).style.display = 'none';
+        document.getElementById(`save-btn-${id}`).style.display = 'inline-block';
+    }
+    
+    function deleteRow(id) {
+        if (confirm("Är du säker på att du vill ta bort denna post?")) {
+            fetch("/admin/delete-payment", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id })
+            }).then(res => {
+                if (res.ok) location.reload();
+                else alert("Fel vid borttagning.");
+            });
+        }
+    }
+    </script>
+<footer class="block" style="text-align: center;">
+    <p style="font-size: 12px; color: #888;"><i>Observera! – du köper endast poäng till topplistan. Inget mer, inget mindre. Inga återbetalningar, bara ära!</i></p>
+    <br>
+    <a href="/">Startsida</a>
+    <a href="/faq">FAQ</a>
+    <a href="/privacy_policy">Integritetspolicy</a>
+</footer>
+</html>
